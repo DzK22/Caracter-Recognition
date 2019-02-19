@@ -1,0 +1,12 @@
+/* style.css */
+
+#clear_button
+{
+	background-color: @error_color;
+	font-weight: bold;
+}
+
+#drawing_area_box
+{
+	background-color: @theme_base_color;
+}
