@@ -1,12 +1,13 @@
 /* style.css */
 
-#clear_button
+#text_label
 {
-	background-color: @error_color;
 	font-weight: bold;
+	font-size: 20px;
 }
 
-#drawing_area_box
+#text_value
 {
-	background-color: @theme_base_color;
+	font-weight: bold;
+	font-size: 40px;
 }

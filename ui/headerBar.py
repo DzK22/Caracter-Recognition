@@ -2,7 +2,7 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
-VERSION = '1.0'
+VERSION = '0.0'
 
 class HeaderBar (Gtk.HeaderBar):
 
@@ -12,11 +12,6 @@ class HeaderBar (Gtk.HeaderBar):
             show_close_button = True,
             title = 'Reconnaissance de texte')
         self.window = window
-
-        # bouton effacer
-        clear_button = Gtk.Button("Effacer", name = 'clear_button')
-        clear_button.connect('clicked', self.window.content.clear)
-        self.pack_start(clear_button)
 
         # bouton menu
         menu_button = Gtk.Button.new_from_icon_name(
@@ -48,11 +43,12 @@ class HeaderBar (Gtk.HeaderBar):
     def show_about_dialog (self, obj):
 
         dialog = Gtk.AboutDialog(
-            authors = ['François Grabenstaetter'],
+            authors = ['François Grabenstaetter', 'Danyl El-Kabyr'],
             license_type = Gtk.License.GPL_3_0,
             version = VERSION,
             modal = True,
-            transient_for = self.window
-        )
+            transient_for = self.window,
+            logo_icon_name = 'system-search-symbolic',
+            comments = 'Un utilitaire de reconnaissance de texte pour le projet de POO2')
 
         dialog.show()

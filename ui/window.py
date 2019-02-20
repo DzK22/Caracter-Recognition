@@ -1,8 +1,8 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk
-from headerBar import HeaderBar
-from content import Content
+from ui.headerBar import HeaderBar
+from ui.content import Content
 
 class Window (Gtk.Window):
 
@@ -12,13 +12,15 @@ class Window (Gtk.Window):
             resizable = False,
             default_width = 700,
             default_height = 400)
-        self.content = Content(self)
 
+        self.content = Content(self)
         self.header_bar = HeaderBar(self)
         self.set_titlebar(self.header_bar)
 
+        self.add(self.content)
+
         # Chargement du CSS
-        with open('style.css') as file:
+        with open('ui/style.css') as file:
             css = file.read()
         cssProvider = Gtk.CssProvider()
         cssProvider.load_from_data(css.encode())
