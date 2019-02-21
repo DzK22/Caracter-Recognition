@@ -1,8 +1,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
-VERSION = '0.0'
+from ui.env import *
 
 class HeaderBar (Gtk.HeaderBar):
 
@@ -10,7 +9,7 @@ class HeaderBar (Gtk.HeaderBar):
 
         Gtk.HeaderBar.__init__(self,
             show_close_button = True,
-            title = 'Reconnaissance de texte')
+            title = PROGRAM_NAME)
         self.window = window
 
         # bouton menu
@@ -49,6 +48,6 @@ class HeaderBar (Gtk.HeaderBar):
             modal = True,
             transient_for = self.window,
             logo_icon_name = 'system-search-symbolic',
-            comments = 'Un utilitaire de reconnaissance de texte pour le projet de POO2')
+            comments = 'Un utilitaire de reconnaissance de lettre pour le projet de POO2')
 
         dialog.show()
