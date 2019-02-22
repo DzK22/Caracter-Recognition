@@ -12,6 +12,11 @@ class HeaderBar (Gtk.HeaderBar):
             title = PROGRAM_NAME)
         self.window = window
 
+        # bouton effacer
+        clear_button = Gtk.Button('Effacer', name = 'clear_button')
+        clear_button.connect('clicked', self.window.content.drawing_area.clear)
+        self.pack_start(clear_button)
+
         # bouton menu
         menu_button = Gtk.Button.new_from_icon_name(
             'open-menu-symbolic',

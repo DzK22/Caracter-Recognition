@@ -22,14 +22,19 @@ class DrawingArea (Gtk.DrawingArea):
         self.connect('button-release-event', self.button_release_event)
         self.connect('motion-notify-event', self.motion_notify_event)
 
-    def button_press_event (self, obj = None, event = None):
+    def clear (self, obj = None):
 
         self.cursor_positions.clear()
+        self.queue_draw()
+
+    def button_press_event (self, obj = None, event = None):
+
         self.button_pressed = True
 
     def button_release_event (self, obj = None, event = None):
 
         self.button_pressed = False
+        self.cursor_positions.append((None, None))
 
     def motion_notify_event (self, obj, event):
 
@@ -51,11 +56,16 @@ class DrawingArea (Gtk.DrawingArea):
         font_color.parse('rgb')
         ctx.set_source_rgb(font_color.red, font_color.green, font_color.blue)
         ctx.set_line_width(6)
-        old_pos = None
+        old_pos = None, None
 
         for (x, y) in self.cursor_positions:
-            if (old_pos is not None):
+            if (old_pos != (None, None)):
                 ctx.move_to(old_pos[0], old_pos[1])
+
+            if ((x, y) != (None, None)):
                 ctx.line_to(x, y)
                 ctx.stroke()
+            else:
+                ctx.new_path()
+
             old_pos = (x, y)

@@ -11,3 +11,9 @@
 	font-weight: bold;
 	font-size: 40px;
 }
+
+#clear_button
+{
+	background-color: @error_color;
+	font-weight: bold;
+}
