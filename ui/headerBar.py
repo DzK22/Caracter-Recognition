@@ -6,7 +6,6 @@ from ui.env import *
 class HeaderBar (Gtk.HeaderBar):
 
     def __init__ (self, window):
-
         Gtk.HeaderBar.__init__(self,
             show_close_button = True,
             title = PROGRAM_NAME)
@@ -26,7 +25,6 @@ class HeaderBar (Gtk.HeaderBar):
         self.pack_end(menu_button)
 
     def show_menu (self, obj):
-
         popover = Gtk.Popover(relative_to = obj)
         popover_box = Gtk.Box(
             orientation = Gtk.Orientation.VERTICAL,
@@ -45,7 +43,6 @@ class HeaderBar (Gtk.HeaderBar):
         popover.popup()
 
     def show_about_dialog (self, obj):
-
         dialog = Gtk.AboutDialog(
             authors = ['François Grabenstaetter', 'Danyl El-Kabyr'],
             license_type = Gtk.License.GPL_3_0,

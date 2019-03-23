@@ -6,13 +6,13 @@ import math
 
 class DrawingArea (Gtk.DrawingArea):
 
-    def __init__ (self):
-
+    def __init__ (self, window_content):
         Gtk.DrawingArea.__init__(self,
-            width_request = DRAWING_AREA_WIDTH,
-            height_request = DRAWING_AREA_HEIGHT,
+            width_request = DRAWING_AREA_SIZE,
+            height_request = DRAWING_AREA_SIZE,
             name = 'drawing_area')
 
+        self.window_content = window_content;
         self.cursor_positions = []
         self.button_pressed = False
 
@@ -23,33 +23,30 @@ class DrawingArea (Gtk.DrawingArea):
         self.connect('motion-notify-event', self.motion_notify_event)
 
     def clear (self, obj = None):
-
         self.cursor_positions.clear()
         self.queue_draw()
+        self.window_content.text_value.set_text('...')
 
     def button_press_event (self, obj = None, event = None):
-
         self.button_pressed = True
 
     def button_release_event (self, obj = None, event = None):
-
         self.button_pressed = False
         self.cursor_positions.append((None, None))
+        self.window_content.recognize_letter(self.cursor_positions)
 
     def motion_notify_event (self, obj, event):
-
         x, y = int(event.x), int(event.y)
 
         if ((self.button_pressed is True) and
-        (x in range(0, DRAWING_AREA_WIDTH)) and
-        (y in range(0, DRAWING_AREA_HEIGHT))):
+        (x in range(0, DRAWING_AREA_SIZE)) and
+        (y in range(0, DRAWING_AREA_SIZE))):
             self.cursor_positions.append((x, y))
             self.queue_draw()
 
     def draw_event (self, obj, ctx):
-
         ctx.set_source_rgba(0, 0, 0, 0.2)
-        ctx.rectangle(0, 0, DRAWING_AREA_WIDTH, DRAWING_AREA_HEIGHT)
+        ctx.rectangle(0, 0, DRAWING_AREA_SIZE, DRAWING_AREA_SIZE)
         ctx.fill()
 
         font_color = self.get_style_context().get_color(Gtk.StateFlags.NORMAL)

@@ -7,7 +7,6 @@ from ui.content import Content
 class Window (Gtk.Window):
 
     def __init__ (self):
-
         Gtk.Window.__init__(self,
             resizable = False,
             default_width = 700,
