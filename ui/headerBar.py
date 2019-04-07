@@ -44,7 +44,7 @@ class HeaderBar (Gtk.HeaderBar):
 
     def show_about_dialog (self, obj):
         dialog = Gtk.AboutDialog(
-            authors = ['François Grabenstaetter', 'Danyl El-Kabyr'],
+            authors = ['François Grabenstaetter', 'Danyl El-Kabir'],
             license_type = Gtk.License.GPL_3_0,
             version = VERSION,
             modal = True,

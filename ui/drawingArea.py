@@ -13,7 +13,7 @@ class DrawingArea (Gtk.DrawingArea):
             name = 'drawing_area')
 
         self.window_content = window_content;
-        self.cursor_positions = []
+        self.positions = []
         self.button_pressed = False
 
         self.connect('draw', self.draw_event)
@@ -23,17 +23,18 @@ class DrawingArea (Gtk.DrawingArea):
         self.connect('motion-notify-event', self.motion_notify_event)
 
     def clear (self, obj = None):
-        self.cursor_positions.clear()
+        self.positions.clear()
         self.queue_draw()
         self.window_content.text_value.set_text('...')
+        self.window_content.change_buttons_sensitivity(False)
 
     def button_press_event (self, obj = None, event = None):
         self.button_pressed = True
 
     def button_release_event (self, obj = None, event = None):
         self.button_pressed = False
-        self.cursor_positions.append((None, None))
-        self.window_content.recognize_letter(self.cursor_positions)
+        self.positions.append((None, None))
+        self.window_content.recognize_character(self.positions)
 
     def motion_notify_event (self, obj, event):
         x, y = int(event.x), int(event.y)
@@ -41,7 +42,7 @@ class DrawingArea (Gtk.DrawingArea):
         if ((self.button_pressed is True) and
         (x in range(0, DRAWING_AREA_SIZE)) and
         (y in range(0, DRAWING_AREA_SIZE))):
-            self.cursor_positions.append((x, y))
+            self.positions.append((x, y))
             self.queue_draw()
 
     def draw_event (self, obj, ctx):
@@ -55,7 +56,7 @@ class DrawingArea (Gtk.DrawingArea):
         ctx.set_line_width(6)
         old_pos = None, None
 
-        for (x, y) in self.cursor_positions:
+        for (x, y) in self.positions:
             if (old_pos != (None, None)):
                 ctx.move_to(old_pos[0], old_pos[1])
 
