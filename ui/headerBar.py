@@ -20,7 +20,6 @@ class HeaderBar (Gtk.HeaderBar):
         menu_button = Gtk.Button.new_from_icon_name(
             'open-menu-symbolic',
             Gtk.IconSize.MENU)
-
         menu_button.connect('clicked', self.show_menu)
         self.pack_end(menu_button)
 
@@ -30,19 +29,21 @@ class HeaderBar (Gtk.HeaderBar):
             orientation = Gtk.Orientation.VERTICAL,
             border_width = 6)
 
-        about_button = Gtk.ModelButton('À propos')
+        reset_button = Gtk.ModelButton('Remmetre à zero', xalign = 0)
+        reset_button.connect('clicked', self.reset_positions)
+        about_button = Gtk.ModelButton('À propos', xalign = 0)
         about_button.connect('clicked', self.show_about_dialog)
-
-        quit_button = Gtk.ModelButton('Quitter')
+        quit_button = Gtk.ModelButton('Quitter', xalign = 0)
         quit_button.connect('clicked', Gtk.main_quit)
 
+        popover_box.add(reset_button)
         popover_box.add(about_button)
         popover_box.add(quit_button)
         popover.add(popover_box)
         popover_box.show_all()
         popover.popup()
 
-    def show_about_dialog (self, obj):
+    def show_about_dialog (self, obj = None):
         dialog = Gtk.AboutDialog(
             authors = ['François Grabenstaetter', 'Danyl El-Kabir'],
             license_type = Gtk.License.GPL_3_0,
@@ -50,6 +51,9 @@ class HeaderBar (Gtk.HeaderBar):
             modal = True,
             transient_for = self.window,
             logo_icon_name = 'system-search-symbolic',
-            comments = 'Un utilitaire de reconnaissance de lettre pour le projet de POO2')
-
+            comments = 'Un utilitaire de reconnaissance de caractère pour le '
+                        'projet de POO2')
         dialog.show()
+
+    def reset_positions (self, obj = None):
+        self.window.content.recognizer.reset_all_positions()

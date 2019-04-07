@@ -7,7 +7,6 @@ from ui.window import Window
 from ui.env import *
 
 GLib.set_prgname(PROGRAM_NAME)
-
 win = Window()
 win.connect('destroy', Gtk.main_quit)
 win.show_all()

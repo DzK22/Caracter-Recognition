@@ -11,32 +11,38 @@ class DrawingArea (Gtk.DrawingArea):
             width_request = DRAWING_AREA_SIZE,
             height_request = DRAWING_AREA_SIZE,
             name = 'drawing_area')
-
         self.window_content = window_content;
         self.positions = []
         self.button_pressed = False
 
         self.connect('draw', self.draw_event)
-        self.add_events(Gdk.EventMask.POINTER_MOTION_MASK | Gdk.EventMask.BUTTON_PRESS_MASK | Gdk.EventMask.BUTTON_RELEASE_MASK)
+        self.add_events(Gdk.EventMask.POINTER_MOTION_MASK |
+                        Gdk.EventMask.BUTTON_PRESS_MASK |
+                        Gdk.EventMask.BUTTON_RELEASE_MASK)
         self.connect('button-press-event', self.button_press_event)
         self.connect('button-release-event', self.button_release_event)
         self.connect('motion-notify-event', self.motion_notify_event)
 
     def clear (self, obj = None):
+        """ Clear all the drawing from the drawing area and the array """
         self.positions.clear()
         self.queue_draw()
         self.window_content.text_value.set_text('...')
         self.window_content.change_buttons_sensitivity(False)
 
     def button_press_event (self, obj = None, event = None):
+        """ The mouse button has been pressed """
         self.button_pressed = True
 
     def button_release_event (self, obj = None, event = None):
+        """ The mouse button has been released, append position (None, None) """
         self.button_pressed = False
         self.positions.append((None, None))
         self.window_content.recognize_character(self.positions)
 
     def motion_notify_event (self, obj, event):
+        """ The cursor position have changed over the drawing area, add the new
+            position if the mouse button is pressed """
         x, y = int(event.x), int(event.y)
 
         if ((self.button_pressed is True) and
@@ -46,6 +52,8 @@ class DrawingArea (Gtk.DrawingArea):
             self.queue_draw()
 
     def draw_event (self, obj, ctx):
+        """ Called when the widget receive a draw signal, show all the points
+            of the draw """
         ctx.set_source_rgba(0, 0, 0, 0.2)
         ctx.rectangle(0, 0, DRAWING_AREA_SIZE, DRAWING_AREA_SIZE)
         ctx.fill()

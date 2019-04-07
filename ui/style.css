@@ -1,19 +1,16 @@
 /* style.css */
 
-#text_label
-{
+#text_label {
 	font-weight: bold;
 	font-size: 20px;
 }
 
-#text_value
-{
+#text_value {
 	font-weight: bold;
 	font-size: 40px;
 }
 
-#clear_button
-{
+#clear_button {
 	background-color: @error_color;
 	font-weight: bold;
 }

@@ -1,3 +1,4 @@
+import os
 from pickle import Pickler, Unpickler
 
 class Character:
@@ -11,12 +12,14 @@ class Character:
         self.positions = positions
 
     def save_positions (self):
+        """ Save the current character positions in a file """
         assert self.positions is not None
         with open(self.files_path + self.val, 'w+b') as file:
             pickler = Pickler(file)
             pickler.dump(self.positions)
 
     def load_positions (self):
+        """ Load the character saved positions from a file """
         try:
             with open(self.files_path + self.val, 'rb') as file:
                 unpickler = Unpickler(file)
@@ -24,3 +27,8 @@ class Character:
         except OSError:
             # file not exist
             self.positions = None
+
+    def delete_positions (self):
+        """ Delete the character positions file """
+        assert self.positions is not None
+        os.remove(self.files_path + self.val)
