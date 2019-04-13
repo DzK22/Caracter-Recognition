@@ -11,47 +11,46 @@ class DrawingArea (Gtk.DrawingArea):
             width_request = DRAWING_AREA_SIZE,
             height_request = DRAWING_AREA_SIZE,
             name = 'drawing_area')
-        self.window_content = window_content;
-        self.positions = []
-        self.button_pressed = False
+        self.__window_content = window_content;
+        self.__positions = []
+        self.__button_pressed = False
 
-        self.connect('draw', self.draw_event)
+        self.connect('draw', self.__draw_event)
         self.add_events(Gdk.EventMask.POINTER_MOTION_MASK |
                         Gdk.EventMask.BUTTON_PRESS_MASK |
                         Gdk.EventMask.BUTTON_RELEASE_MASK)
-        self.connect('button-press-event', self.button_press_event)
-        self.connect('button-release-event', self.button_release_event)
-        self.connect('motion-notify-event', self.motion_notify_event)
+        self.connect('button-press-event', self.__button_press_event)
+        self.connect('button-release-event', self.__button_release_event)
+        self.connect('motion-notify-event', self.__motion_notify_event)
 
     def clear (self, obj = None):
         """ Clear all the drawing from the drawing area and the array """
-        self.positions.clear()
+        self.__positions.clear()
         self.queue_draw()
-        self.window_content.text_value.set_text('...')
-        self.window_content.change_buttons_sensitivity(False)
+        self.__window_content.text_label.set_text('...')
+        self.__window_content.change_buttons_sensitivity(False)
 
-    def button_press_event (self, obj = None, event = None):
+    def __button_press_event (self, obj = None, event = None):
         """ The mouse button has been pressed """
-        self.button_pressed = True
+        self.__button_pressed = True
 
-    def button_release_event (self, obj = None, event = None):
+    def __button_release_event (self, obj = None, event = None):
         """ The mouse button has been released, append position (None, None) """
-        self.button_pressed = False
-        self.positions.append((None, None))
-        self.window_content.recognize_character(self.positions)
+        self.__button_pressed = False
+        self.__positions.append((None, None))
+        self.__window_content.recognize_character(self.__positions)
 
-    def motion_notify_event (self, obj, event):
+    def __motion_notify_event (self, obj, event):
         """ The cursor position have changed over the drawing area, add the new
             position if the mouse button is pressed """
         x, y = int(event.x), int(event.y)
 
-        if ((self.button_pressed is True) and
-        (x in range(0, DRAWING_AREA_SIZE)) and
-        (y in range(0, DRAWING_AREA_SIZE))):
-            self.positions.append((x, y))
+        if (self.__button_pressed is True) and (x in range(0, \
+            DRAWING_AREA_SIZE)) and (y in range(0, DRAWING_AREA_SIZE)):
+            self.__positions.append((x, y))
             self.queue_draw()
 
-    def draw_event (self, obj, ctx):
+    def __draw_event (self, obj, ctx):
         """ Called when the widget receive a draw signal, show all the points
             of the draw """
         ctx.set_source_rgba(0, 0, 0, 0.2)
@@ -64,11 +63,11 @@ class DrawingArea (Gtk.DrawingArea):
         ctx.set_line_width(6)
         old_pos = None, None
 
-        for (x, y) in self.positions:
-            if (old_pos != (None, None)):
+        for (x, y) in self.__positions:
+            if old_pos != (None, None):
                 ctx.move_to(old_pos[0], old_pos[1])
 
-            if ((x, y) != (None, None)):
+            if (x, y) != (None, None):
                 ctx.line_to(x, y)
                 ctx.stroke()
             else:
