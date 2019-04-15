@@ -30,8 +30,8 @@ class HeaderBar (Gtk.HeaderBar):
             orientation = Gtk.Orientation.VERTICAL,
             border_width = 6)
 
-        reset_button = Gtk.ModelButton('Remmetre à zero', xalign = 0)
-        reset_button.connect('clicked', self.__reset_positions)
+        reset_button = Gtk.ModelButton('Remmetre par défaut', xalign = 0)
+        reset_button.connect('clicked', self.__reset_default_all_positions)
         about_button = Gtk.ModelButton('À propos', xalign = 0)
         about_button.connect('clicked', self.__show_about_dialog)
         quit_button = Gtk.ModelButton('Quitter', xalign = 0)
@@ -56,5 +56,5 @@ class HeaderBar (Gtk.HeaderBar):
                 'projet de POO2')
         dialog.show()
 
-    def __reset_positions (self, obj = None):
-        self.__window.content.recognizer.reset_all_positions()
+    def __reset_default_all_positions (self, obj = None):
+        self.__window.content.recognizer.reset_default_all_positions()

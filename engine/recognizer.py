@@ -1,15 +1,22 @@
 import math
-from engine.character import Character
+from engine.letter import Letter
+from engine.symbol import Symbol
 from ui.env import *
 
 class Recognizer ():
 
-    def __init__ (self):
+    def __init__ (self, type):
         self.__positions = []
-        self.__characters = []
-        for c in CHARACTERS_LIST:
-            self.__characters.append(Character(c))
-            self.__characters[-1].load_positions()
+        if type == 'letter':
+            self.valid_characters = list(Letter(None).valid_letters())
+            for key, c in enumerate(self.valid_characters):
+                self.valid_characters[key] = Letter(c)
+        else:
+            self.valid_characters = list(Symbol(None).valid_symbols())
+            for key, c in enumerate(self.valid_characters):
+                self.valid_characters[key] = Symbol(c)
+        for c in self.valid_characters:
+            c.load_positions()
 
     def recognize (self, positions):
         """ Return the character recognized (or ?) """
@@ -28,18 +35,18 @@ class Recognizer ():
     def learn_from_positions (self, character):
         """ Tell the program the good character and save it for future
             recognition """
-        for char in self.__characters:
+        for char in self.valid_characters:
             if char.val == character:
                 char.set_positions(self.__positions)
                 char.save_positions()
                 break
 
-    def reset_all_positions (self):
+    def reset_default_all_positions (self):
         """ Delete all characters files to reset the positions """
-        for char in self.__characters:
+        for char in self.valid_characters:
             if char.positions is not None:
-                char.delete_positions()
-                char.positions = None
+                char.reset_default_positions()
+                char.load_positions()
 
     def __clean_extra_positions (self):
         """ Remove every position which is too closer with another """
@@ -82,10 +89,15 @@ class Recognizer ():
         size_ratio = STRETCH_SIZE / DRAWING_AREA_SIZE
 
         if (width / height) < 0.15:
-            # hack for 1 and i
+            # hack for 1, i and SHIFT
             new_x = left_diff + width // 2
             for key in range(len(self.__positions)):
                 self.__positions[key] = (new_x, self.__positions[key][1])
+        elif (height / width) < 0.15:
+            # hack for SPACE and BACK-SPACE
+            new_y = top_diff + height // 2
+            for key in range(len(self.__positions)):
+                self.__positions[key] = (self.__positions[key][0], new_y)
 
         for key, (x, y) in enumerate(self.__positions):
             try:
@@ -138,7 +150,7 @@ class Recognizer ():
             positions) """
         best_char = None
         best_diff = None
-        for char in self.__characters:
+        for char in self.valid_characters:
             if char.positions is None:
                 continue
             diff = 0

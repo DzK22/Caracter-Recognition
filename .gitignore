@@ -1,2 +1,3 @@
 __pycache__
-engine/data/*
+engine/data/current/*
+!engine/data/current/.gitkeep

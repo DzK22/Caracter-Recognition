@@ -9,7 +9,7 @@ class Window (Gtk.Window):
     def __init__ (self):
         Gtk.Window.__init__(self,
             resizable = False,
-            default_width = 700,
+            default_width = 800,
             default_height = 400)
 
         self.content = Content(self)
