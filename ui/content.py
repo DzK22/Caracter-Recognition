@@ -29,7 +29,7 @@ class Content (Gtk.Box):
         # Recognized character
         self.recognizer = Recognizer(self.__type)
         text_label = Gtk.Label('Caractère reconnu:', name = 'text_label')
-        self.text_label = Gtk.Label('...', name = 'text_value_label')
+        self.text_label = Gtk.Label('...', name = 'text_value_label', width_chars = 10)
 
         # Learn the good result
         self.__learn_entry = Gtk.Entry(max_length = 10, width_chars = 10,

@@ -88,6 +88,11 @@ class Recognizer ():
         width = DRAWING_AREA_SIZE - left_diff - right_diff
         size_ratio = STRETCH_SIZE / DRAWING_AREA_SIZE
 
+        if width == 0:
+            width = 1
+        if height == 0:
+            height = 1
+
         if (width / height) < 0.15:
             # hack for 1, i and SHIFT
             new_x = left_diff + width // 2
