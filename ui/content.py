@@ -100,7 +100,7 @@ class Content (Gtk.Box):
 
         if obj.get_active():
             self.__type = obj_val
-            self.recognizer = Recognizer(self.__type)
+            self.recognizer.change_type(self.__type)
             self.recognize_character(self.drawing_area.positions)
             with other.handler_block(other_handler):
                 other.set_active(False)

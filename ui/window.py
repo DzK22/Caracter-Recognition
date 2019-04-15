@@ -17,7 +17,7 @@ class Window (Gtk.Window):
         self.set_titlebar(self.header_bar)
         self.add(self.content)
 
-        # Chargement du CSS
+        # Load CSS
         with open('ui/style.css') as file:
             css = file.read()
         cssProvider = Gtk.CssProvider()

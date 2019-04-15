@@ -31,6 +31,5 @@ class Character:
     def reset_default_positions (self):
         """ Reset current character position file (in data/current/) by the
             default (in data/default/) """
-        assert self.positions is not None
         copyfile(self.__data_path + 'default/' + self.val,
                  self.__data_path + 'current/' + self.val)

@@ -1,5 +1,5 @@
 DRAWING_AREA_SIZE = 340
-VERSION = '0.4'
+VERSION = '0.5'
 PROGRAM_NAME = 'Reconnaissance de caractère'
 STRETCH_SIZE = 40
 ADJUST_POS_NUMBER = 80

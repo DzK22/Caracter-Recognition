@@ -1,22 +1,28 @@
 import math
+from engine.character import Character
 from engine.letter import Letter
 from engine.symbol import Symbol
 from ui.env import *
+import os
 
 class Recognizer ():
 
     def __init__ (self, type):
         self.__positions = []
-        if type == 'letter':
-            self.valid_characters = list(Letter(None).valid_letters())
-            for key, c in enumerate(self.valid_characters):
-                self.valid_characters[key] = Letter(c)
-        else:
-            self.valid_characters = list(Symbol(None).valid_symbols())
-            for key, c in enumerate(self.valid_characters):
-                self.valid_characters[key] = Symbol(c)
-        for c in self.valid_characters:
-            c.load_positions()
+        self.__letters = list(Letter(None).valid_letters())
+        self.__symbols = list(Symbol(None).valid_symbols())
+        self.__all_characters = self.__letters + self.__symbols
+        self.valid_characters = []
+        self.change_type(type);
+        # If data/current/ directory is empty, put the default files in it
+        if len(os.listdir('engine/data/current/')) < len(self.__all_characters):
+            missing_characters = []
+            for char in self.__all_characters:
+                c = Character(char)
+                c.load_positions()
+                if c.positions is None:
+                    missing_characters.append(char)
+            self.reset_default_all_positions(missing_characters)
 
     def recognize (self, positions):
         """ Return the character recognized (or ?) """
@@ -41,12 +47,30 @@ class Recognizer ():
                 char.save_positions()
                 break
 
-    def reset_default_all_positions (self):
-        """ Delete all characters files to reset the positions """
-        for char in self.valid_characters:
-            if char.positions is not None:
-                char.reset_default_positions()
-                char.load_positions()
+    def reset_default_all_positions (self, characters = None):
+        """ Delete all characters files (if characters is None) or only the
+            positions of the characters (in array characters) to reset the
+            positions """
+        for char in self.__all_characters:
+            if (characters is None) or (char in characters):
+                Character(char).reset_default_positions()
+                for c in self.valid_characters:
+                    if (c.val == char):
+                        c.load_positions()
+
+    def change_type (self, type):
+        """ Change the type with changing characters in
+            self.valid_characters and load them """
+        if type == 'letter':
+            self.valid_characters = self.__letters.copy()
+            for key, c in enumerate(self.valid_characters):
+                self.valid_characters[key] = Letter(c)
+                self.valid_characters[key].load_positions()
+        else:
+            self.valid_characters = self.__symbols.copy()
+            for key, c in enumerate(self.valid_characters):
+                self.valid_characters[key] = Symbol(c)
+                self.valid_characters[key].load_positions()
 
     def __clean_extra_positions (self):
         """ Remove every position which is too closer with another """
@@ -170,11 +194,18 @@ class Recognizer ():
         return best_char
 
     def __print_draw (self, max):
-        for j in range(max):
+        """ Function to debug by printing the positions """
+        for i in range(max + 1):
+            print('-', end = '')
+        for i in range(max):
             print('\n|', end = '')
-            for i in range(max):
-                if (i, j) in self.__positions:
+            for j in range(max):
+                if (j, i) in self.__positions:
                     print('*', end = '')
                 else:
                     print(' ', end = '')
             print('|', end = '')
+        print()
+        for i in range(max + 1):
+            print('-', end = '')
+        print()
