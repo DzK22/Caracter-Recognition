@@ -36,6 +36,7 @@ class Content (Gtk.Box):
                                        sensitive = False)
         self.__learn_button = Gtk.Button(label = 'Apprendre', sensitive = False)
         self.__learn_entry.connect('changed', self.__learn_entry_changed)
+        self.__learn_entry.connect('key-press-event', self.__learn_entry_key_press_event)
         self.__learn_button.connect('clicked', self.__learn_button_clicked)
 
         # Containers
@@ -121,3 +122,8 @@ class Content (Gtk.Box):
         elif (self.__learn_button.get_sensitive() is True) and \
         (car.val is None):
             self.__learn_button.set_sensitive(False)
+
+    def __learn_entry_key_press_event (self, obj, event):
+        """ On key press, check if the key is the key RETURN """
+        if (self.__learn_button.get_sensitive() is True) and (event.hardware_keycode == 36):
+            self.__learn_button.clicked()

@@ -26,11 +26,14 @@ class Recognizer ():
 
     def recognize (self, positions):
         """ Return the character recognized (or ?) """
-        self.__positions = positions
-        self.__clean_extra_positions()
+        self.__positions = positions.copy()
+        self.__clean_none_positions()
         self.__stretch_positions()
+        self.__delete_doublons()
+        self.__fill_holes()
+        self.__delete_doublons()
         self.__adjust_positions_number()
-        self.__print_draw(STRETCH_SIZE) # debug only
+        self.__print_draw()
 
         best = self.__best_match()
         if best is None:
@@ -72,23 +75,14 @@ class Recognizer ():
                 self.valid_characters[key] = Symbol(c)
                 self.valid_characters[key].load_positions()
 
-    def __clean_extra_positions (self):
-        """ Remove every position which is too closer with another """
-        new_positions = []
-        min_dist = DRAWING_AREA_SIZE // CLEAN_DIST_MIN_RATIO
-        last_pos = None, None
-
-        for (key, (x, y)) in enumerate(self.__positions):
-            if (x, y) == (None, None):
-                continue
-            none_neighbour = (last_pos == (None, None)) or \
-                (self.__positions[key + 1] == (None, None))
-            dist_ok = (not none_neighbour) and (math.sqrt(math.pow(x - \
-                last_pos[0], 2) + math.pow(y - last_pos[1], 2)) >= min_dist)
-            if none_neighbour or dist_ok:
-                last_pos = x, y
-                new_positions.append(last_pos)
-        self.__positions = new_positions
+    def __clean_none_positions (self):
+        """ Remove the (None, None) values from the array """
+        while True:
+            try:
+                self.__positions.remove((None, None))
+            except ValueError:
+                # no more values to delete
+                break
 
     def __stretch_positions (self):
         """ Change the coords to scale them (adjust and center) in a
@@ -119,12 +113,22 @@ class Recognizer ():
 
         if (width / height) < 0.15:
             # hack for 1, i and SHIFT
-            new_x = left_diff + width // 2
+            left_diff = 0
+            right_diff = 0
+            width = DRAWING_AREA_SIZE
+            new_x = math.floor(DRAWING_AREA_SIZE * 0.4) if \
+                self.__positions[0][1] < self.__positions[-1][1] else \
+                math.floor(DRAWING_AREA_SIZE * 0.6)
             for key in range(len(self.__positions)):
                 self.__positions[key] = (new_x, self.__positions[key][1])
         elif (height / width) < 0.15:
             # hack for SPACE and BACK-SPACE
-            new_y = top_diff + height // 2
+            top_diff = 0
+            bottom_diff = 0
+            height = DRAWING_AREA_SIZE
+            new_y = math.floor(DRAWING_AREA_SIZE * 0.4) if \
+                self.__positions[0][0] < self.__positions[-1][0] else \
+                math.floor(DRAWING_AREA_SIZE * 0.6)
             for key in range(len(self.__positions)):
                 self.__positions[key] = (self.__positions[key][0], new_y)
 
@@ -143,6 +147,51 @@ class Recognizer ():
             new_y = math.floor((y + bottom_diff * y_relative_pos - top_diff * \
                (1 - y_relative_pos)) * size_ratio)
             self.__positions[key] = new_x, new_y
+
+    def __fill_holes (self):
+        """ Add a new positions between each not-neighbours positions, to avoid
+            any hole between 2 positions """
+        new_positions = []
+        last_pos = (None, None)
+        for (x, y) in self.__positions:
+            if last_pos is not (None, None):
+                x_diff = x - last_pos[0]
+                y_diff = y - last_pos[1]
+                if (math.fabs(x_diff) > 1) or (math.fabs(y_diff) > 1):
+                    next_x = last_pos[0]
+                    next_y = last_pos[1]
+
+                    add_x = 1 if math.fabs(x_diff) >= math.fabs(y_diff) \
+                              else x_diff / (y_diff if y_diff != 0 else x_diff)
+                    if (x_diff * add_x) < 0:
+                        add_x *= -1
+                    add_y = 1 if math.fabs(y_diff) >= math.fabs(x_diff) \
+                              else y_diff / (x_diff if x_diff != 0 else y_diff)
+                    if (y_diff * add_y) < 0:
+                        add_y *= -1
+
+                    counter = 0
+                    while True:
+                        increase_x = ((next_x < x) and (x_diff > 0)) or \
+                                     ((next_x > x) and (x_diff < 0))
+                        increase_y = ((next_y < y) and (y_diff > 0)) or \
+                                     ((next_y > y) and (y_diff < 0))
+                        if increase_x and increase_y:
+                            if (counter % 2) == 0:
+                                next_x += add_x
+                            else:
+                                next_y += add_y
+                        elif increase_x:
+                            next_x += add_x
+                        elif increase_y:
+                            next_y += add_y
+                        else:
+                            break
+                        new_positions.append((math.floor(next_x), math.floor(next_y)))
+                        counter += 1
+            new_positions.append((x, y))
+            last_pos = (x, y)
+        self.__positions = new_positions
 
     def __adjust_positions_number (self):
         """ Add or remove some positions to have exactly ADJUST_POS_NUMBER
@@ -172,7 +221,6 @@ class Recognizer ():
                     size -= 1
                     k -= 1
                 k += incr
-            assert len(self.__positions) == ADJUST_POS_NUMBER
 
     def __best_match (self):
         """ Return the most probable character (with comparison of
@@ -183,29 +231,38 @@ class Recognizer ():
             if char.positions is None:
                 continue
             diff = 0
+            pos_len = len(self.__positions)
             for key, (x, y) in enumerate(char.positions):
-                if len(self.__positions) <= key:
+                if pos_len <= key:
                     break
-                diff += math.fabs(x - self.__positions[key][0] + y - \
-                    self.__positions[key][1])
+                diff += math.fabs(x - self.__positions[key][0]) + \
+                    math.fabs(y - self.__positions[key][1])
             if (best_diff is None) or (diff < best_diff):
                 best_char = char
                 best_diff = diff
         return best_char
 
-    def __print_draw (self, max):
+    def __delete_doublons (self):
+        new_positions = []
+        for (x, y) in self.__positions:
+            if (x, y) not in new_positions:
+                new_positions.append((x, y))
+        self.__positions = new_positions
+
+    def __print_draw (self):
         """ Function to debug by printing the positions """
-        for i in range(max + 1):
+        print()
+        for i in range(STRETCH_SIZE + 2):
             print('-', end = '')
-        for i in range(max):
+        for i in range(STRETCH_SIZE):
             print('\n|', end = '')
-            for j in range(max):
+            for j in range(STRETCH_SIZE):
                 if (j, i) in self.__positions:
                     print('*', end = '')
                 else:
                     print(' ', end = '')
             print('|', end = '')
         print()
-        for i in range(max + 1):
+        for i in range(STRETCH_SIZE + 2):
             print('-', end = '')
         print()
