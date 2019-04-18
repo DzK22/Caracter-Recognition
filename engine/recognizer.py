@@ -62,8 +62,8 @@ class Recognizer ():
                         c.load_positions()
 
     def change_type (self, type):
-        """ Change the type with changing characters in
-            self.valid_characters and load them """
+        """ Change the type with changing characters in self.valid_characters
+            and load them """
         if type == 'letter':
             self.valid_characters = self.__letters.copy()
             for key, c in enumerate(self.valid_characters):
@@ -149,8 +149,7 @@ class Recognizer ():
             self.__positions[key] = new_x, new_y
 
     def __fill_holes (self):
-        """ Add a new positions between each not-neighbours positions, to avoid
-            any hole between 2 positions """
+        """ Add new positions to avoid any hole between 2 positions """
         new_positions = []
         last_pos = (None, None)
         for (x, y) in self.__positions:
@@ -243,6 +242,7 @@ class Recognizer ():
         return best_char
 
     def __delete_doublons (self):
+        """ Delete doublons is self.__positions and keep the correct order """
         new_positions = []
         for (x, y) in self.__positions:
             if (x, y) not in new_positions:
@@ -250,7 +250,7 @@ class Recognizer ():
         self.__positions = new_positions
 
     def __print_draw (self):
-        """ Function to debug by printing the positions """
+        """ Print the positions """
         print()
         for i in range(STRETCH_SIZE + 2):
             print('-', end = '')
