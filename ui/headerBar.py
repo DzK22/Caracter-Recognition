@@ -14,7 +14,7 @@ class HeaderBar (Gtk.HeaderBar):
         # bouton effacer
         clear_button = Gtk.Button('Effacer', name = 'clear_button')
         clear_button.connect('clicked', \
-            self.__window.content.drawing_area.clear)
+            self.__window.content.clear)
         self.pack_start(clear_button)
 
         # bouton menu

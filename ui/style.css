@@ -1,5 +1,13 @@
 /* style.css */
 
+#type_label {
+	font-size: 20px;
+}
+
+#type_button {
+	font-size: 18px;
+}
+
 #text_label {
 	font-weight: bold;
 	font-size: 20px;
@@ -13,4 +21,8 @@
 #clear_button {
 	background-color: @error_color;
 	font-weight: bold;
+}
+
+#learn_character {
+	font-size: 20px;
 }

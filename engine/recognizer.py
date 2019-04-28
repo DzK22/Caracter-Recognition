@@ -2,6 +2,9 @@ import math
 from engine.character import Character
 from engine.letter import Letter
 from engine.symbol import Symbol
+from engine.punctuation import Punctuation
+from engine.extended import Extended
+from engine.accent import Accent
 from ui.env import *
 import os
 
@@ -11,7 +14,11 @@ class Recognizer ():
         self.__positions = []
         self.__letters = list(Letter(None).valid_letters())
         self.__symbols = list(Symbol(None).valid_symbols())
-        self.__all_characters = self.__letters + self.__symbols
+        self.__punctuations = list(Punctuation(None).valid_punctuations())
+        self.__extendeds = list(Extended(None).valid_extendeds())
+        self.__accents = list(Accent(None).valid_accents())
+        self.__all_characters = self.__letters + self.__symbols + \
+            self.__punctuations + self.__extendeds + self.__accents
         self.valid_characters = []
         self.change_type(type);
         # If data/current/ directory is empty, put the default files in it
@@ -25,7 +32,7 @@ class Recognizer ():
             self.reset_default_all_positions(missing_characters)
 
     def recognize (self, positions):
-        """ Return the character recognized (or ?) """
+        """ Return the character recognized (or (?)) """
         self.__positions = positions.copy()
         self.__clean_none_positions()
         self.__stretch_positions()
@@ -37,7 +44,7 @@ class Recognizer ():
 
         best = self.__best_match()
         if best is None:
-            return '?'
+            return '(?)'
         else:
             return best.val
 
@@ -69,25 +76,38 @@ class Recognizer ():
             for key, c in enumerate(self.valid_characters):
                 self.valid_characters[key] = Letter(c)
                 self.valid_characters[key].load_positions()
-        else:
+        elif type == 'symbol':
             self.valid_characters = self.__symbols.copy()
             for key, c in enumerate(self.valid_characters):
                 self.valid_characters[key] = Symbol(c)
                 self.valid_characters[key].load_positions()
+        elif type == 'punctuation':
+            self.valid_characters = self.__punctuations.copy()
+            for key, c in enumerate(self.valid_characters):
+                self.valid_characters[key] = Punctuation(c)
+                self.valid_characters[key].load_positions()
+        elif type == 'extended':
+            self.valid_characters = self.__extendeds.copy()
+            for key, c in enumerate(self.valid_characters):
+                self.valid_characters[key] = Extended(c)
+                self.valid_characters[key].load_positions()
+        elif type == 'accent':
+            self.valid_characters = self.__accents.copy()
+            for key, c in enumerate(self.valid_characters):
+                self.valid_characters[key] = Accent(c)
+                self.valid_characters[key].load_positions()
 
     def __clean_none_positions (self):
         """ Remove the (None, None) values from the array """
-        while True:
-            try:
-                self.__positions.remove((None, None))
-            except ValueError:
-                # no more values to delete
-                break
+        for key, (x, y) in enumerate(self.__positions):
+            if (x is None) or (y is None):
+                del self.__positions[key]
 
     def __stretch_positions (self):
         """ Change the coords to scale them (adjust and center) in a
             STRETCH_SIZE of size area """
         min_pos_x, max_pos_x, min_pos_y, max_pos_y = None, None, None, None
+        assert len(self.__positions) > 1
         for x, y in self.__positions:
             if (min_pos_x is None) or (x < min_pos_x):
                 min_pos_x = x

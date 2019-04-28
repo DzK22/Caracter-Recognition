@@ -3,10 +3,7 @@ from engine.character import Character
 class Letter (Character):
 
     def __init__ (self, val):
-        if self.__is_valid_letter(val) is True:
-            Character.__init__(self, val)
-        else:
-            self.val = None
+        Character.__init__(self, val)
 
     def valid_letters (self):
         return ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
