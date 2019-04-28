@@ -98,7 +98,7 @@ class Recognizer ():
                 self.valid_characters[key].load_positions()
 
     def __clean_none_positions (self):
-        """ Remove the (None, None) values from the array """
+        """ Remove the None values from the array """
         for key, (x, y) in enumerate(self.__positions):
             if (x is None) or (y is None):
                 del self.__positions[key]
