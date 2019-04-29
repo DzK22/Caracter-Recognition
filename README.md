@@ -13,7 +13,7 @@ Un utilitaire de reconnaissance de caractère pour le projet de POO2 réalisé e
 
 ## Utilisation
 
-Le programme essaie de reconnaître la lettre ou le symbole (activer le bon bouton) désinné dans la zone de gauche. Si le caractère reconnu n'est pas le bon, il est possible de corriger celà en faisant ré-apprendre au programme le bon caractère.
+Le programme essaie de reconnaître le caractère dessiné dans la zone de gauche (penser a choisir le bon type de caractère). Si le caractère reconnu n'est pas le bon, il est possible de corriger cela en faisant ré-apprendre au programme le bon caractère.
 
 Il est possible de remettre les données d'apprentissage par défaut depuis le menu.
 
