@@ -18,8 +18,12 @@ Le programme essaie de reconnaître la lettre ou le symbole (activer le bon bout
 Il est possible de remettre les données d'apprentissage par défaut depuis le menu.
 
 **Caractères possibles:**
-* **Lettres:** A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z
-* **Symboles (chiffres et spéciaux):** 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, SPACE, RETURN, SHIFT, CAPS LOCK, BACK-SPACE
+
+Tous les caractères sur cette images sont supportés:
+
+![Graffiti dessins](graffiti.png)
+
+*Note: Space: SP, Back-Space: BS, Return: CR, Shift: SH, Caps Lock: CL, Tabulation: TB*
 
 ## Lancer le programme
 
