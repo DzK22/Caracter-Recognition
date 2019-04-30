@@ -4,7 +4,7 @@
 
 Un utilitaire de reconnaissance de caractère pour le projet de POO2 réalisé en Python 3 en utilisant la bibliothèque PyGTK
 
-![Reconnaissance de caractères](screenshot.png)
+![Reconnaissance de caractères](img/screenshot.png)
 
 ## Auteurs
 
@@ -21,7 +21,7 @@ Il est possible de remettre les données d'apprentissage par défaut depuis le m
 
 Tous les caractères sur cette images sont supportés:
 
-![Graffiti dessins](graffiti.png)
+![Graffiti dessins](img/graffiti.png)
 
 *Note: Space: SP, Back-Space: BS, Return: CR, Shift: SH, Caps Lock: CL, Tabulation: TB*
 
