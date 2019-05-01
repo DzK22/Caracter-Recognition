@@ -95,6 +95,7 @@ class Content (Gtk.Box):
             self.recognizer.change_type(self.__type)
             self.recognize_character(self.drawing_area.positions)
             self.__learn_character.set_label('☝')
+            self.change_buttons_sensitivity(True)
 
         for key, type in enumerate(types):
             if type == self.__type:
