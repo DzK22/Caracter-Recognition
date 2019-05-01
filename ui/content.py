@@ -128,7 +128,8 @@ class Content (Gtk.Box):
         popover = Gtk.Popover().new(self.__learn_character)
         popover_box = Gtk.FlowBox(min_children_per_line = 6,
                                   max_children_per_line = 6,
-                                  selection_mode = Gtk.SelectionMode.NONE)
+                                  selection_mode = Gtk.SelectionMode.NONE,
+                                  homogeneous = True)
         popover.add(popover_box)
 
         def button_click_event (obj, data = None):

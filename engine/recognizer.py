@@ -206,7 +206,8 @@ class Recognizer ():
                             next_y += add_y
                         else:
                             break
-                        new_positions.append((math.floor(next_x), math.floor(next_y)))
+                        new_positions.append((math.floor(next_x),
+                                              math.floor(next_y)))
                         counter += 1
             new_positions.append((x, y))
             last_pos = (x, y)

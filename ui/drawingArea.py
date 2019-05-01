@@ -37,9 +37,11 @@ class DrawingArea (Gtk.DrawingArea):
     def __button_release_event (self, obj = None, event = None):
         """ The mouse button has been released, append position (None, None) """
         self.__button_pressed = False
-        self.positions.append((None, None))
-        if self.positions.count((None, None)) < (len(self.positions) - 1):
-            self.__window_content.recognize_character(self.positions)
+        if (len(self.positions) == 0) or \
+        (self.positions[-1] is not (None, None)):
+            self.positions.append((None, None))
+            if self.positions.count((None, None)) < (len(self.positions) - 1):
+                self.__window_content.recognize_character(self.positions)
 
     def __motion_notify_event (self, obj, event):
         """ The cursor position have changed over the drawing area, add the new

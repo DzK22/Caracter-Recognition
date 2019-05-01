@@ -51,7 +51,8 @@ class HeaderBar (Gtk.HeaderBar):
         dialog = Gtk.MessageDialog(
             modal = True,
             transient_for = self.__window,
-            text = '<b>Remettre l\'apprentissage des caractères par défaut ?</b>',
+            text = '<b>Remettre l\'apprentissage des caractères par défaut ?'
+                '</b>',
             use_markup = True,
             secondary_text = 'Les caractères courrants seront effacés',
             buttons = Gtk.ButtonsType.OK_CANCEL,
