@@ -56,7 +56,7 @@ class DrawingArea (Gtk.DrawingArea):
     def __draw_event (self, obj, ctx):
         """ Called when the widget receive a draw signal, show all the points
             of the draw """
-        ctx.set_source_rgba(0, 0, 0, 0.2)
+        ctx.set_source_rgba(0, 0, 0, 0.15)
         ctx.rectangle(0, 0, DRAWING_AREA_SIZE, DRAWING_AREA_SIZE)
         ctx.fill()
 
