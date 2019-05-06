@@ -31,3 +31,12 @@ Tous les caractères sur cette images sont supportés:
 chmod +x run.py
 ./run.py
 ```
+
+## Paquets requis
+
+Les paquets suivants sont requis pour le bon fonctionnement du programme (dépendances pkg-config):
+
+- python3 (>= 3.5)
+- gtk+-3.0
+- pyobject-3.0
+- py3cairo
