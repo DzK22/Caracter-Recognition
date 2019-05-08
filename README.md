@@ -38,5 +38,5 @@ Les paquets suivants sont requis pour le bon fonctionnement du programme (dépen
 
 - python3 (>= 3.5)
 - gtk+-3.0
-- pyobject-3.0
+- pygobject-3.0
 - py3cairo

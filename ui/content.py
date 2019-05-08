@@ -112,6 +112,8 @@ class Content (Gtk.Box):
         self.__learn_character.set_sensitive(sensitive)
         if sensitive and (self.__learn_character.get_label() == '☝'):
             self.__learn_button.set_sensitive(False)
+            if self.text_label.get_label() == '...':
+                self.__learn_character.set_sensitive(False)
         else:
             self.__learn_button.set_sensitive(sensitive)
 
