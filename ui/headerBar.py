@@ -10,6 +10,7 @@ class HeaderBar (Gtk.HeaderBar):
             show_close_button = True,
             title = PROGRAM_NAME)
         self.__window = window
+        self.__graffiti_dialog_is_open = False
 
         # bouton effacer
         clear_button = Gtk.Button('Effacer', name = 'clear_button')
@@ -73,15 +74,21 @@ class HeaderBar (Gtk.HeaderBar):
         dialog.show();
 
     def __show_graffiti_dialog (self, obj = None):
+        if self.__graffiti_dialog_is_open:
+            return
+        self.__graffiti_dialog_is_open = True
         dialog = Gtk.Window(
-            modal = True,
             transient_for = self.__window,
-            resizable = False
+            resizable = False,
         )
         dialog_headerbar = Gtk.HeaderBar(show_close_button = True,
                                          title = "Dessins Graffiti")
         dialog.set_titlebar(dialog_headerbar)
         dialog.add_events(Gdk.EventMask.KEY_PRESS_MASK)
+
+        def dialog_destroy_event (obj = None, event = None):
+            self.__graffiti_dialog_is_open = False
+        dialog.connect('destroy', dialog_destroy_event)
 
         def dialog_key_press (obj, event):
             if event.hardware_keycode == 9:

@@ -173,7 +173,7 @@ class Recognizer ():
         new_positions = []
         last_pos = (None, None)
         for (x, y) in self.__positions:
-            if last_pos is not (None, None):
+            if (last_pos[0] is not None) and (last_pos[1] is not None):
                 x_diff = x - last_pos[0]
                 y_diff = y - last_pos[1]
                 if (math.fabs(x_diff) > 1) or (math.fabs(y_diff) > 1):
