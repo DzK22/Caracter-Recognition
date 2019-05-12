@@ -1,5 +1,5 @@
 DRAWING_AREA_SIZE = 340
-VERSION = '1.2'
+VERSION = '1.3'
 PROGRAM_NAME = 'Reconnaissance de caractère'
 
 """ WARNING: by changing the next constants you should re-learn the program
